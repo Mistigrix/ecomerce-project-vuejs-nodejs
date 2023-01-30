@@ -1,10 +1,10 @@
 <template>
     <div class="product-card">
         <div class="product-image">
-            <img :src="product_image" />
+            <img :src="product.image" />
         </div>
         <div class="product-info">
-            <h4 class="price">$3.60</h4>
+            <h4 class="price">${{ product.price }}</h4>
             <h4 class="other">Trending now</h4>
         </div>
     </div>
@@ -14,12 +14,9 @@
     export default {
         name: 'ProductCard',
         props: {
-            product_image: String,
+            product: Object,
         },
-        methos: {
-            getProductByCategory() {
-                
-            }
+        setup() {
         },
     }
 </script>
