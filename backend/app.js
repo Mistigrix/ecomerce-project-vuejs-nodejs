@@ -1,6 +1,6 @@
 const express = require('express');
-
 const app = express();
+const productRouter = require('./routes/product');
 
 // app.set('port', 3000)
 
@@ -48,12 +48,6 @@ const product_data = [
     },
 ]
 
-
-
-const product = new Product("Telecomande",
-3.60, "new arrivals",
-"https://s.alicdn.com/@sc04/kf/H2745f23e22a9428b86b703a326ea1c22s.png_120x120.jpg");
-
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Content, Accept, Authorization, X-Requested-');
@@ -61,24 +55,6 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/api/products', (req, res) => {
-    res.statusCode = 200;
-    res.json({
-        product_data
-    })
-});
-
-app.get('/api/products/category/:category_name', (req, res) => {
-    const product_response_list = [];
-    product_data.forEach(product => {
-        if (product.category == req.params.category_name) {
-            product_response_list.push(product);
-        } 
-    })
-
-    res.json({
-        product_response_list
-    }) 
-})
+app.use('/api/products', productRouter);
 
 module.exports = app;
