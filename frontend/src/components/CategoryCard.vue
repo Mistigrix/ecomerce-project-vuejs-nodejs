@@ -1,13 +1,11 @@
 <template>
     <div class="category-card">  
         <router-link class="title" to="/">
-            <img height="16" width="16" class="lazyload" src="https://img.alicdn.com/tfs/TB1jyqhzy_1gK0jSZFqXXcpaXXa-44-44.png" />
+            <img height="16" width="16" class="lazyload" :src="icon_url" />
             <span>{{ category_name }}</span>
         </router-link>
-        <div class="products-list">
-            <section v-for="(product, i) in products_data_list" :key="i">
-                <ProductCard v-for="(p, j) in product" :key="j" ref="products_list" :product="p" />
-            </section>
+        <div v-if="getProductsData[0]" class="products-list">
+                <ProductCard v-for="(product, j) in getProductsData[0]" :key="j" ref="products_list" :product="product" :is_product="false" />
         </div>
     </div>
 </template>
@@ -22,27 +20,39 @@ import ProductCard from './ProductCard.vue'
             ProductCard
         },
         props: {
-            category_name: String,
+            category_name: {
+                type: String,
+                required: true,
+            },
+            icon_url: String,
+        },
+        data() {
+            return {
+                category: this.category_name
+            }
         },
         computed: {
+            getProductsData: function () {
+                //console.log(this.getProductsData)
+                let products_list = ref([])
+                const XHRequest = new XMLHttpRequest();
+                XHRequest.open("GET", "http://localhost:3000/api/products/category/" + this.category);
+                XHRequest.send();
+                XHRequest.responseType = "json";
+                XHRequest.onload = () => {
+                if (XHRequest.readyState == 4 && XHRequest.status == 200) {
+                    products_list.value.push((XHRequest.response));
+                } else {
+                    console.log(`Error: ${XHRequest.status}`);
+                }
+            }
+            console.log(products_list.value)
+            
+            return products_list.value;
+            },
         },
         setup() {
-            let products_list = ref([])
-            const XHRequest = new XMLHttpRequest();
-            XHRequest.open("GET", "http://localhost:3000/api/products/category/New arrivals");
-            XHRequest.send();
-            XHRequest.responseType = "json";
-            XHRequest.onload = () => {
-            if (XHRequest.readyState == 4 && XHRequest.status == 200) {
-                products_list.value.push((XHRequest.response.product_response_list));
-            } else {
-                console.log(`Error: ${XHRequest.status}`);
-            }
-        }
-        
-        return {
-            products_data_list: products_list.value
-        }
+            console.log(this)
         }
     }
 </script>v 

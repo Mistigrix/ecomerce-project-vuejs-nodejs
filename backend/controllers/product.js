@@ -1,4 +1,4 @@
-const { Product } = require('../models/product');
+const { Product, Category } = require('../models/product');
 
 const getAllProducts = (req, res) => {
         Product.findAll()
@@ -44,9 +44,52 @@ const getOneProduct = (req, res) => {
     });
 }
 
+
+const getAllCategories = (req, res) => {
+    Category.findAll()
+    .then((response) => res.status(200).json(response))
+    .catch(error => {
+        console.error(error)
+        res.status(500).json({ errorCode: 500, message: "Server Error"});
+    });
+}
+
+const getAllName = (req, res) => {
+    let category_name_list = [];
+    Category.findAll({
+        attributes: ['category_name']
+    })
+    .then((response) => {
+        response.forEach(category => {
+            category_name_list.push(category.dataValues.category_name);
+        })
+        console.log(category_name_list);
+        res.status(200).json(category_name_list)
+    })
+    .catch(error => {
+        console.error(error)
+        res.status(500).json({ errorCode: 500, message: "Server Error"});
+    });
+    
+}
+
+const createCategory = (req, res) => {
+    Category.create({
+        ...req.body
+    })
+    .then(category => res.status(200).send("Categorie creer"))
+    .catch(error => {
+        console.error(error)
+        res.status(500).json({message: "Server Error"})
+    });
+}
+
 module.exports = {
     getAllProducts,
     getProductsByCategory,
     createProduct,
     getOneProduct,
+    getAllCategories,
+    getAllCategoriesInList: getAllName,
+    createCategory,
 };

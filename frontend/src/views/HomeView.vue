@@ -1,31 +1,42 @@
 <template>
-    <div class="header">
-        <router-link class="logo" to="/"></router-link>
-        <div class="search-box">
-            <input id="search-bar" type="text" class="search-bar" />
-            <input type="submit" class="search-submit" value="Search">
-        </div>
-        <div class="account">
-            <div class="account-icon"></div>
-            <router-link to="#" class="signin">Sing in</router-link>
-            <router-link to="#" class="join-for-free">Join for free</router-link>
-        </div>
-    </div>
     <div id="home">
-        <h2>Bienvenue sur <strong>E-CommerceSite</strong></h2>
+        <h2>Bienvenue sur <strong>{{ app_name }}</strong></h2>
         <div class="categories-list">
-            <CategoryCard v-for="(category_name, i) in category_name" :key="i"
-            :category_name="category_name" />
+            <CategoryCard v-for="(category, i) in getAllCategories[0]" :key="i"
+            :category_name="category.category_name" :icon_url="category.icon_url" />
         </div>
     </div>
 </template>
 
 <script>
     import CategoryCard from '@/components/CategoryCard.vue';
+    import { ref } from 'vue';
+
     export default {
         name: 'HomePage',
         components: {
-            CategoryCard
+            CategoryCard,
+        },
+        props: {
+            app_name: String,
+        },
+        computed: {
+            getAllCategories: function() {
+                let categories_list = ref([]);
+                const XHRequest = new XMLHttpRequest();
+                XHRequest.open("GET", "http://localhost:3000/api/products/categories/getAll");
+                XHRequest.send();
+                XHRequest.responseType = "json";
+                XHRequest.onload = () => {
+                if (XHRequest.readyState == 4 && XHRequest.status == 200) {
+                    categories_list.value.push((XHRequest.response));
+                } else {
+                    console.log(`Error: ${XHRequest.status}`);
+                }
+            }
+            console.log(categories_list.value)
+            return categories_list.value;
+            }
         },
         setup() {
             const category_name = [
@@ -42,14 +53,16 @@
 </script>
 
 <style lang="scss">
-    .categories-list {
+
+       .categories-list {
         display: flex
     }
-    .header {
+    .header-middle {
         display: flex;
         width: 100%;
         min-width: 720px;
         vertical-align: bottom;
+
         .logo {
             width: 180px;
             height: auto;
