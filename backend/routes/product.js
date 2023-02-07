@@ -9,14 +9,10 @@ router.get('/', ProductController.getAllProducts);
 
 router.get('/category/:category', ProductController.getProductsByCategory)
 
-router.post('/', ProductController.createProduct)
-
 router.get('/:product_name', ProductController.getOneProduct)
 
 router.get('/categories/getAll', ProductController.getAllCategories);
 
 router.get('/categories/getAllName', ProductController.getAllCategoriesInList);
-
-router.post('/createCategory', ProductController.createCategory)
 
 module.exports = router;

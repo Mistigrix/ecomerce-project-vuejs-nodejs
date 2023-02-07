@@ -1,19 +1,19 @@
-//const { Sequelize } = require('sequelize');
-const { Sequelize } = require('sequelize');
+var mysql = require('mysql2');
 
-module.exports =  new Sequelize('alibaba_copy', 'root', 'rootpassword', {
-    host: 'localhost',
-    dialect: 'mysql'
+var connexion = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "rootpassword"
 });
 
-// try {
-//     db.authenticate();
-//     console.log('Connection has been established successfully');
-// } catch (err) {
-//     console.error('Unable to connect to database: ',err);
-// }
+connexion.connect(function(err) {
+  if (err) throw err;
+  console.log("Connexion...");
+});
 
-// export default db;
+connexion.query("USE alibaba_copy", function(error, result) {
+    if (error) throw error;
+    console.log("Connexion to database is success!")
+})
 
-
-// 0626
+module.exports = connexion

@@ -2,7 +2,7 @@
   <div class="header">
         <div class="header-middle">
           <div class="dropdown-and-app-name">
-            <Dropdown :items="getAllCategories" />
+            <Dropdown :items="categories_list" />
             <h2><router-link class="app-name fl" to="/">{{ app_name }}</router-link></h2>
           </div>
           <div class="search-box">
@@ -21,19 +21,20 @@
         </div>
         <div class="sc-hd-line" style="background: #E6E7EB;height: 1px;width: 100%;"></div>
         <div class="header-bottom">
-            <NavBar />
+            <NavBar :minimum_categories="getMinimumCategories" />
         </div>
     </div>
   <div id="app">
-    <RouterView :app_name="app_name"/>
+    <RouterView :app_name="app_name" :categories="categories_list"/>
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue';
 import { RouterView } from "vue-router";
-import { ref } from 'vue';
+// import { ref } from 'vue';
 import Dropdown from './components/Dropdown.vue';
+import axios from 'axios';
 
   // import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -44,35 +45,54 @@ import Dropdown from './components/Dropdown.vue';
     RouterView,
     Dropdown
 },
-computed: {
-  getAllCategories: function () {
+mounted () {
+    axios
+      .get('http://localhost:3000/api/products/categories/getAllName')
+      .then((response) => {
+        console.log(response.data)
+        this.categories_list = response.data
+      });
 
-    let products_list = ref([])
-    const XHRequest = new XMLHttpRequest();
-    XHRequest.open("GET", "http://localhost:3000/api/products/categories/getAllName");
-    XHRequest.send();
-    XHRequest.responseType = "json";
-    XHRequest.onreadystatechange = () => {
-    if (XHRequest.readyState == 4 && XHRequest.status == 200) {
-        products_list.value = XHRequest.responseText;
-    } else {
-        console.log(`ErrorCode: ${XHRequest.status}`);
-    }
-    }
-    console.log(products_list);
-            
-    return [{title: 'item 1', link: '#'}, {title: 'item 2', link: '#'},{title: 'item 3', link: '#'}];
-  }
-},
+      // console.log(this.categories_list.value);
+
+    // categories_list.forEach(category  => {
+    //   // console.log(category);
+    //   this.categories_list.push(
+    //     {
+    //       title: category,
+    //       link: '#'
+    //     }
+    //   )
+    // });
+    // console.log(this.categories_list)
+  },
 data() {
   return {
     app_name: 'DigitalDrom',
+    categories_list: null
   }
 }
   }
 </script>
 
 <style lang="scss">
+  .box-center {
+    display: flex;
+    justify-content: center;
+  }
+
+  .padding-left-large {
+    padding-left: 100px;
+  }
+  .padding-right-large {
+    padding-right: 100px;
+  }
+  .padding-left-xlarge {
+    padding-left: 150px;
+  }
+  .padding-right-xlarge {
+    padding-right: 150px;
+  }
 .header {
   .dropdown-and-app-name {
     display: flex;

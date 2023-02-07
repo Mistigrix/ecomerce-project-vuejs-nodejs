@@ -1,6 +1,6 @@
 <template>
     <div id="home">
-        <h2>Bienvenue sur <strong>{{ app_name }}</strong></h2>
+        <h2>Welcome to <strong>{{ app_name }}</strong></h2>
         <div class="categories-list">
             <CategoryCard v-for="(category, i) in getAllCategories[0]" :key="i"
             :category_name="category.category_name" :icon_url="category.icon_url" />

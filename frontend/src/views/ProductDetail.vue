@@ -8,7 +8,7 @@
                 <div class="product-info">
                     <h3 class="title">{{ product.value[0].product_name }}</h3>
                     <div class="sc-hd-line" style="background: #E6E7EB;height: 1px;width: 100%;"></div>
-                    <h4 class="price">${{ product.value[0].price }}</h4>
+                    <h4 class="price">{{ product.value[0].price }} Fr Cfa</h4>
                     <span class="available" v-if="product.value[0].isAvailable">Available</span>
                     <span class="available" v-else>Not Available</span>
                     <div class="quantity-box">
@@ -16,7 +16,7 @@
                         <input id="quantity" type="number" class="quantity" value="1">
                     </div>
                     <div class="btn-buy-box">
-                        <button class="btn-buy">Add To Shop</button>
+                        <button class="btn-buy"><router-link class="c-white text-decoration-none" :to="{ name: 'updateProduct', params: {product_name: product.value[0].product_name} }">Modifier le produit</router-link></button>
                     </div>
                 </div> 
             </div>
@@ -127,6 +127,13 @@ import { ref } from 'vue';
                     }
                     &:active {
                         border: solid 2px black;
+                    }
+
+                    .c-white {
+                        color: white;
+                    }
+                    .text-decoration-none {
+                        text-decoration: none;
                     }
                 }
 

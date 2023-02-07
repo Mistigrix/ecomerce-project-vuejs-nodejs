@@ -1,13 +1,13 @@
 <template>
-    <div class="menu-items" @click="isOpen = !isOpen">
-        <div class="dropdown-bar">
+    <div class="menu-items">
+        <div class="dropdown-bar"  @click="isOpen = !isOpen" @blur="isOpen = false" >
             <div class="bar"></div>
             <div class="bar"></div>
             <div class="bar"></div>
         </div>
         <div class="sub-menu" v-if="isOpen">
             <div class="menu-item" v-for="(item, i) in items" :key="i">
-                <router-link class="item" :to="item.link">{{ item.title }}</router-link>
+                <router-link class="item" :to="{name:'categoryProducts', params:{category:item}}">{{ item }}</router-link>
             </div>
         </div>
     </div>
@@ -23,7 +23,7 @@
             return {
                 isOpen: false
             }
-        }
+        },
     }
 </script>
 
@@ -42,21 +42,30 @@
   }
   
   .menu-items {
+    display: block;
+    justify-content: center;
+
     .sub-menu {
         position: absolute;
         background-color: white;
-        top: calc(20% + 5px);
-        left: 6%;
         transform: translateX(-50%);
-        width: 10%;
+        //width: 20%;
         border-radius: 16px 16px 16px 16px;
         box-shadow: 6px 6px 25px rgba(0, 0, 0, 0.5);
-        text-align: center;
+        left: 7%;
 
+        .menu-item {
+                                                                                                                               
+        }
         .item {
             color: black;
             text-decoration: none;
             font-size: large;
+            white-space: nowrap;
+            //margin: 10px 2%;
+            &:hover {
+                background-color: rgb(222, 217, 217)
+            }
         }
     }
 }

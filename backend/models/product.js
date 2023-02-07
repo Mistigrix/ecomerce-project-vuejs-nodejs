@@ -23,8 +23,6 @@ const Product = db.define('Product', {
             type: DataTypes.STRING,
             // default: 'https://www.mrpanet.org/global_graphics/default-store-350x350.jpg'
         },
-    }, {
-        timestamps: true,
     });
 
 const Category = db.define('products_categories', {
@@ -41,12 +39,7 @@ const Category = db.define('products_categories', {
         type: DataTypes.STRING,
         allowNull: true,
     }
-}, {
-    timestamps: true,
-});
-
-Category.hasMany(Product, { foreignKey: 'product_id' });
-Product.hasOne(Category, { foreignKey: 'category_id' });
+},);
 
 module.exports.Product = Product;
 module.exports.Category = Category;
